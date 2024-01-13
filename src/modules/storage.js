@@ -1,6 +1,6 @@
 export default class Storage {
     getTodoList() {
-        return JSON.parse(localStorage.getItem('todos')) || [];
+        return JSON.parse(localStorage.getItem("todos")) || [];
     }
 
     display() {
@@ -8,43 +8,54 @@ export default class Storage {
         console.log(todoList);
     }
 
-    add(TodoCard) {
-        const todoList = this.getTodoList();
-        todoList.push(TodoCard);
-        localStorage.setItem('todos', JSON.stringify(todoList));
-    }
-
-    add(newTodoCard) {
+    addTodo(newTodoCard) {
         const todoList = this.getTodoList();
 
         const todoExists = todoList.some(
             (todo) =>
-                todo.title === newTodoCard.title && todo.dueDate === newTodoCard.dueDate
+                todo.title === newTodoCard.title &&
+                todo.dueDate === newTodoCard.dueDate
         );
 
         if (!todoExists) {
-            this.books.push(newTodoCard);
-            localStorage.setItem('todos', JSON.stringify(todoList));
+            todoList.push(newTodoCard);
+            localStorage.setItem("todos", JSON.stringify(todoList));
         } else {
-            alert(`${newTodoCard.title} with ${newTodoCard.dueDate} is already present`);
+            alert(
+                `${newTodoCard.title} with ${newTodoCard.dueDate} already exists`
+            );
         }
     }
+
+    wipe() {
+        localStorage.setItem("todos", JSON.stringify([]));
+    }
+
+    deleteTodo(todoToRemove) {
+        const todoList = this.getTodoList();
+        const todoIndex = todoList.findIndex((todo) =>
+            this.areTodosEqual(todo, todoToRemove)
+        );
+
+        if (todoIndex !== -1) {
+            todoList.splice(todoIndex, 1);
+            localStorage.setItem("todos", JSON.stringify(todoList));
+        }
+    }
+
+    deleteProjectTodos(project) {
+        let todoList = this.getTodoList();
+        todoList = todoList.filter(todo => todo.project != project);
+        localStorage.setItem("todos", JSON.stringify(todoList));
+    }
+
+    areTodosEqual(todo1, todo2) {
+        return (
+            todo1.title === todo2.title &&
+            todo1.description === todo2.description &&
+            todo1.dueDate === todo2.dueDate &&
+            todo1.priority === todo2.priority &&
+            todo1.notes === todo2.notes
+        );
+    }
 }
-
-// ----------Factory
-
-// function createStorage() {
-//     return {
-//       display: function() {
-//         console.log("coucou");
-//         console.log(localStorage);
-//       },
-  
-//       add: function(todoCard) {
-//         localStorage.setItem('todoCard', JSON.stringify(todoCard));
-//       }
-//     };
-//   }
-  
-//   export default createStorage;
-  
