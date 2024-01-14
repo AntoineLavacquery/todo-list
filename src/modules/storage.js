@@ -3,6 +3,19 @@ export default class Storage {
         return JSON.parse(localStorage.getItem("todos")) || [];
     }
 
+    getTodosFromProject(project) {
+        const todoList = this.getTodoList();
+        return todoList.filter(todo => todo.project == project);
+    }
+
+    getTodayTodos() {
+        // todo
+    }
+
+    getThisWeekTodos() {
+        // todo
+    }
+
     display() {
         const todoList = this.getTodoList();
         console.log(todoList);

@@ -41,9 +41,11 @@ storage.display();
 projects.display();
 
 console.log("~~~~~~~~~~~~~~~~~")
-projects.deleteProject("Personal");
+// projects.deleteProject("Personal");
 
-console.log("Storage :")
-storage.display();
-console.log("Projects :")
-projects.display();
+console.log(storage.getTodosFromProject("Personal"))
+
+// console.log("Storage :")
+// storage.display();
+// console.log("Projects :")
+// projects.display();
