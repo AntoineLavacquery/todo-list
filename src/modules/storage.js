@@ -1,3 +1,6 @@
+import { compareAsc, format, startOfDay, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
+import { compareDates } from './date';
+
 export default class Storage {
     getTodoList() {
         return JSON.parse(localStorage.getItem("todos")) || [];
@@ -8,12 +11,23 @@ export default class Storage {
         return todoList.filter(todo => todo.project == project);
     }
 
-    getTodayTodos() {
-        // todo
+    getTodaysTodos() {
+        const todoList = this.getTodoList();
+        const currentDate = startOfDay(new Date());
+        const todaysTodos = todoList.filter(todo => !compareAsc(startOfDay(new Date(todo.dueDate)), currentDate));
+        return todaysTodos;
     }
 
     getThisWeekTodos() {
-        // todo
+        const todoList = this.getTodoList();
+        const currentDate = startOfDay(new Date());
+        const daysOfWeek = eachDayOfInterval({ start: startOfWeek(currentDate), end: endOfWeek(currentDate) });
+        console.log({daysOfWeek})
+        const thisWeekTodos = todoList.filter(todo => {
+            const todoDate = startOfDay(new Date(todo.dueDate));
+            return daysOfWeek.some(day => +day === +todoDate);
+        });
+        return thisWeekTodos;
     }
 
     display() {
