@@ -3,13 +3,11 @@ import Storage from "./modules/storage";
 import Projects from "./modules/project";
 
 class TodoCard {
-    constructor(title, project, description, dueDate, priority, notes) {
+    constructor(title, project, dueDate, priority) {
         (this.title = title),
             (this.project = project),
-            (this.description = description),
             (this.dueDate = dueDate),
-            (this.priority = priority),
-            (this.notes = notes);
+            (this.priority = priority)
     }
 }
 
@@ -99,3 +97,40 @@ addTodoButton.addEventListener("click", (event) => {
 
     displayTodos(storage.getTodoList());
 });
+
+// ----------------------------------------------
+
+
+function createButton(label, containerQuery, callback) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("nav-link", "link-body-emphasis", "btn", "btn-link");
+    button.textContent = label;
+    button.addEventListener("click", function () {
+        activateAndExecute(button, containerQuery, callback);
+    });
+    const li = document.createElement("li");
+    li.appendChild(button);
+    document.querySelector(containerQuery).appendChild(li);
+    button.callback = callback;
+}
+
+// Fonction pour activer le bouton et désactiver les autres
+function activateAndExecute(clickedButton, containerQuery, callback) {
+    // Desactivate all buttons
+    var buttons = document.querySelectorAll(`ul#home button, ul#project button`);
+    buttons.forEach(function (button) {
+        button.classList.remove("active");
+    });
+
+    clickedButton.classList.add("active");
+    callback();
+}
+
+
+createButton("Inbox", "ul#home", storage.getTodoList);
+createButton("Today", "ul#home", storage.getTodoList);
+createButton("This Week", "ul#home", storage.getTodoList);
+
+createButton("Coucou", "ul#project", storage.getTodaysTodos);
+
