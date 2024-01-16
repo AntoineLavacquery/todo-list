@@ -1,5 +1,4 @@
 import { compareAsc, format, startOfDay, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
-import { compareDates } from './date';
 
 export default class Storage {
     getTodoList() {
