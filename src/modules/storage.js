@@ -1,78 +1,115 @@
-import { compareAsc, format, startOfDay, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
+import {
+    compareAsc,
+    format,
+    startOfDay,
+    startOfWeek,
+    endOfWeek,
+    eachDayOfInterval,
+} from "date-fns";
 
 export default class Storage {
-    getTodoList() {
-        return JSON.parse(localStorage.getItem("todos")) || [];
+    getProjectObj(project) {
+        return localStorage.getItem(project)
+            ? JSON.parse(localStorage.getItem(project))
+            : [];
     }
 
-    getTodosFromProject(project) {
-        const todoList = this.getTodoList();
-        return todoList.filter(todo => todo.project == project);
+    addTodo(newTodo) {
+        const projectObj = this.getProjectObj(newTodo.project);
+
+        if (projectObj) {
+            const todoExists = projectObj.some(
+                (todo) =>
+                    todo.title === newTodo.title &&
+                    todo.dueDate === newTodo.dueDate
+            );
+
+            if (!todoExists) {
+                projectObj.push(newTodo);
+                localStorage.setItem(
+                    newTodo.project,
+                    JSON.stringify(projectObj)
+                );
+            } else {
+                alert(
+                    `${newTodoCard.title} with ${newTodoCard.dueDate} already exists`
+                );
+            }
+        } else {
+            localStorage.setItem(newTodo.project, JSON.stringify([newTodo]));
+        }
+    }
+
+    deleteTodo(todoToDelete) {
+        const projectsNames = this.getProjectsNames();
+        projectsNames.forEach((projectName) => {
+            const projectObj = this.getProjectObj(projectName);
+            const todoIndex = projectObj.findIndex((todo) =>
+                this.areTodosEqual(todo, todoToDelete)
+            );
+
+            if (todoIndex !== -1) {
+                projectObj.splice(todoIndex, 1);
+                localStorage.setItem(projectName, JSON.stringify(projectObj));
+            }
+        });
+    }
+
+    deleteProject(project) {
+        localStorage.removeItem(project);
+    }
+
+    display() {
+        console.log({ localStorage });
+    }
+
+    wipe() {
+        localStorage.clear();
+    }
+
+    getProjectsNames() {
+        const projects = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const project = localStorage.key(i);
+            projects.push(project);
+        }
+        return projects;
+    }
+
+    getAllTodos() {
+        let allProjects = [];
+        const projectsNames = this.getProjectsNames();
+        projectsNames.forEach((projectName) => {
+            const projectObj = this.getProjectObj(projectName);
+
+            for (const project of projectObj) {
+                allProjects.push(project);
+            }
+        });
+        return allProjects;
     }
 
     getTodaysTodos() {
-        const todoList = this.getTodoList();
+        const allTodos = this.getAllTodos();
         const currentDate = startOfDay(new Date());
-        const todaysTodos = todoList.filter(todo => !compareAsc(startOfDay(new Date(todo.dueDate)), currentDate));
+        const todaysTodos = allTodos.filter((todo) => {
+            !compareAsc(startOfDay(new Date(todo.dueDate)), currentDate);
+        });
         return todaysTodos;
     }
 
     getThisWeekTodos() {
-        const todoList = this.getTodoList();
+        const allTodos = this.getAllTodos();
         const currentDate = startOfDay(new Date());
-        const daysOfWeek = eachDayOfInterval({ start: startOfWeek(currentDate), end: endOfWeek(currentDate) });
-        console.log({daysOfWeek})
-        const thisWeekTodos = todoList.filter(todo => {
+        const daysOfWeek = eachDayOfInterval({
+            start: startOfWeek(currentDate),
+            end: endOfWeek(currentDate),
+        });
+        const thisWeekTodos = todoList.filter((todo) => {
             const todoDate = startOfDay(new Date(todo.dueDate));
-            return daysOfWeek.some(day => +day === +todoDate);
+            return daysOfWeek.some((day) => +day === +todoDate);
         });
         return thisWeekTodos;
-    }
-
-    display() {
-        const todoList = this.getTodoList();
-        console.log(todoList);
-    }
-
-    addTodo(newTodoCard) {
-        const todoList = this.getTodoList();
-
-        const todoExists = todoList.some(
-            (todo) =>
-                todo.title === newTodoCard.title &&
-                todo.dueDate === newTodoCard.dueDate
-        );
-
-        if (!todoExists) {
-            todoList.push(newTodoCard);
-            localStorage.setItem("todos", JSON.stringify(todoList));
-        } else {
-            alert(
-                `${newTodoCard.title} with ${newTodoCard.dueDate} already exists`
-            );
-        }
-    }
-
-    wipe() {
-        localStorage.setItem("todos", JSON.stringify([]));
-    }
-
-    deleteTodo(todoToRemove) {
-        const todoList = this.getTodoList();
-        const todoIndex = todoList.findIndex((todo) =>
-            this.areTodosEqual(todo, todoToRemove)
-        );
-
-        if (todoIndex !== -1) {
-            todoList.splice(todoIndex, 1);
-            localStorage.setItem("todos", JSON.stringify(todoList));
-        }
-    }
-
-    deleteProjectTodos(project) {
-        let todoList = this.getTodoList();
-        todoList = todoList.filter(todo => todo.project != project);
-        localStorage.setItem("todos", JSON.stringify(todoList));
     }
 
     areTodosEqual(todo1, todo2) {
