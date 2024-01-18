@@ -41,33 +41,29 @@
         </div>
 
         <div id="main" class="p-3 w-100">
-            <div
-                class="alert alert-secondary alert-dismissible fade show d-flex justify-content-between"
-                role="alert">
-                <div class="d-flex gap-2">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="checkbox" />
-                    <span id="title">Go see dad</span>
+            <button id="add-todo" type="button" class="btn btn-success mb-2 w-100">
+                <i class="bi bi-plus" style="font-size: 24px"></i>
+            </button>
+
+            <div id="todo-container">
+                <div
+                    class="alert alert-secondary alert-dismissible fade show d-flex justify-content-between"
+                    role="alert">
+                    <div class="d-flex gap-2">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="checkbox" />
+                        <span id="title">Go see dad</span>
+                    </div>
+                    <div id="remaining">three days remaining</div>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
                 </div>
-
-                <div id="remaining">three days remaining</div>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="d-flex justify-content-center">
-                <button
-                    class="btn btn-primary rounded-circle p-3 lh-1"
-                    type="button">
-                    <i class="bi bi-plus" style="font-size: 24px"></i>
-                    <span class="visually-hidden">Dismiss</span>
-                </button>
             </div>
         </div>
 
