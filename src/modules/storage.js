@@ -40,6 +40,10 @@ export default class Storage {
         }
     }
 
+    addProject(project) {
+        localStorage.setItem(project, JSON.stringify([]));
+    }
+
     deleteTodo(todoToDelete) {
         const projectsNames = this.getProjectsNames();
         projectsNames.forEach((projectName) => {
@@ -93,7 +97,7 @@ export default class Storage {
         const allTodos = this.getAllTodos();
         const currentDate = startOfDay(new Date());
         const todaysTodos = allTodos.filter((todo) => {
-            !compareAsc(startOfDay(new Date(todo.dueDate)), currentDate);
+            return !compareAsc(startOfDay(new Date(todo.dueDate)), currentDate);
         });
         return todaysTodos;
     }
@@ -105,7 +109,7 @@ export default class Storage {
             start: startOfWeek(currentDate),
             end: endOfWeek(currentDate),
         });
-        const thisWeekTodos = todoList.filter((todo) => {
+        const thisWeekTodos = allTodos.filter((todo) => {
             const todoDate = startOfDay(new Date(todo.dueDate));
             return daysOfWeek.some((day) => +day === +todoDate);
         });

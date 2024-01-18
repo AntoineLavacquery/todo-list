@@ -6,26 +6,20 @@ class Todo {
         (this.title = title),
             (this.project = project),
             (this.dueDate = dueDate),
-            (this.priority = priority)
+            (this.priority = priority);
     }
 }
 
 const todoContainer = document.querySelector("div#main");
 
-// function displayTodo(todo) {
-//     todoContainer.innerText = "";
-//     todoList.forEach((todo) => {
-//         console.log(todo);
-//         todoContainer.appendChild(createTodoElement(todo));
-//     });
-// }
-
-function appendTodoElement(todo) {
+function appendTodoToDOM(todo) {
+    console.log("Coucou");
     const todoElement = document.createElement("div");
-    todoElement.classList = "alert alert-secondary alert-dismissible fade show d-flex justify-content-between"
+    todoElement.classList =
+        "alert alert-secondary alert-dismissible fade show d-flex justify-content-between";
 
     const leftPart = document.createElement("div");
-    leftPart.classList = "d-flex gap-2"
+    leftPart.classList = "d-flex gap-2";
 
     const checkbox = document.createElement("input");
     checkbox.id = "checkbox";
@@ -40,115 +34,28 @@ function appendTodoElement(todo) {
     leftPart.appendChild(title);
 
     const timeRemaining = document.createElement("div");
-    timeRemaining.id = remaining;
+    timeRemaining.id = "remaining";
     timeRemaining.innerHTML = todo.dueDate;
 
-    todoElement.appendChild(title);
+    const closeButton = document.createElement("button");
+    closeButton.type = "button";
+    closeButton.className = "btn-close";
+    closeButton.setAttribute("data-bs-dismiss", "alert");
+    closeButton.setAttribute("aria-label", "Close");
+
     todoElement.appendChild(leftPart);
     todoElement.appendChild(timeRemaining);
+    todoElement.appendChild(closeButton);
 
     todoContainer.appendChild(todoElement);
 }
 
-// const displayButton = document.querySelector("button#display");
-
-// displayButton.addEventListener("click", function () {
-//     displayTodos(storage.getTodoList());
-// });
-
-// console.log(storage.getTodoList());
-
-// const addTodoButton = document.querySelector("button#add");
-
-// addTodoButton.addEventListener("click", (event) => {
-//     event.preventDefault();
-
-//     const formData = new FormData(document.querySelector("form"));
-
-//     const title = formData.get("title");
-//     const project = formData.get("project");
-//     const description = formData.get("description");
-//     const dueDate = formData.get("dueDate");
-//     const notes = formData.get("notes");
-
-//     console.log("Title:", title);
-//     console.log("Project:", project);
-//     console.log("Description:", description);
-//     console.log("Due Date:", dueDate);
-//     console.log("Notes:", notes);
-
-//     const newTodo = new Todo(
-//         title,
-//         project,
-//         description,
-//         new Date(dueDate),
-//         0,
-//         notes
-//     );
-//     storage.addTodo(newTodo);
-
-//     displayTodos(storage.getTodoList());
-// });
-
-// ----------------------------------------------
-
-
-function createButton(label, containerQuery, callback) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.classList.add("nav-link", "link-body-emphasis", "btn", "btn-link");
-    button.textContent = label;
-    button.addEventListener("click", function () {
-        activateAndExecute(button, containerQuery, callback);
-    });
-    const li = document.createElement("li");
-    li.appendChild(button);
-    document.querySelector(containerQuery).appendChild(li);
-    button.callback = callback;
-}
-
-// Fonction pour activer le bouton et désactiver les autres
-function activateAndExecute(clickedButton, containerQuery, callback) {
-    // Desactivate all buttons
-    var buttons = document.querySelectorAll(`ul#home button, ul#project button`);
-    buttons.forEach(function (button) {
-        button.classList.remove("active");
-    });
-
-    clickedButton.classList.add("active");
-    callback();
-}
-
-
-
-
-// createButton("Personnal", "ul#project", storage.getTodaysTodos);
-
-function simulateAddTodo() {
-    // add todo to storage
-    // add toto to dom
-}
-
 const storage = new Storage();
 
-createButton("Inbox", "ul#home", storage.getTodoList);
-createButton("Today", "ul#home", storage.getTodoList);
-createButton("This Week", "ul#home", storage.getTodoList);
-
-// const projects = new Projects(storage, "Personal", "Work");
-
-// function displayProject(project) {
-//     project.projects.forEach((project) => {
-//         createButton(project)
-//         if project
-//     })
-//     createButton(project.)
-// }
-
-const todo1 = new Todo("titre1", "Personal", "2024-01-24", 2);
-const todo2 = new Todo("titre2", "Personal", "2024-01-25", 1);
-const todo3 = new Todo("titre3", "Work", "2024-01-26", 0);
-const todo4 = new Todo("titre4", "Sport", "2024-01-27", 2);
+const todo1 = new Todo("titre1", "Personal", "2024-01-18", 2);
+const todo2 = new Todo("titre2", "Personal", "2024-01-20", 1);
+const todo3 = new Todo("titre3", "Work", "2024-03-26", 0);
+const todo4 = new Todo("titre4", "Sport", "2024-03-27", 2);
 
 storage.wipe();
 storage.addTodo(todo1);
@@ -162,3 +69,73 @@ console.log(storage.getProjectsNames());
 console.log(storage.getProjectObj("Personal"));
 console.log(storage.getAllTodos());
 
+function desactivateAllButtons() {
+    const homeButtons = document.querySelectorAll("ul#home button");
+    const projectButtons = document.querySelectorAll("ul#project button");
+    const buttons = [...homeButtons, ...projectButtons];
+    buttons.forEach((button) => button.classList.remove("active"));
+}
+
+function createButton(label, containerQuery, callback) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("nav-link", "link-body-emphasis", "btn", "btn-link");
+    button.textContent = label;
+    button.addEventListener("click", function () {
+        desactivateAllButtons();
+        button.classList.add("active");
+        callback(label);
+    });
+    const li = document.createElement("li");
+    li.appendChild(button);
+    document.querySelector(containerQuery).appendChild(li);
+    // button.callback = callback;
+}
+
+function displayInbox() {
+    const todos = storage.getAllTodos();
+    todoContainer.innerHTML = "";
+    todos.forEach((todo) => {
+        appendTodoToDOM(todo);
+    });
+}
+
+function displayToday() {
+    const todos = storage.getTodaysTodos();
+    todoContainer.innerHTML = "";
+    todos.forEach((todo) => {
+        appendTodoToDOM(todo);
+    });
+}
+
+function displayThisWeek() {
+    const todos = storage.getThisWeekTodos();
+    todoContainer.innerHTML = "";
+    todos.forEach((todo) => {
+        appendTodoToDOM(todo);
+    });
+}
+
+function displayProject(project) {
+    const todos = storage.getProjectObj(project);
+    if (!todos) {
+        storage.addProject(project);
+    }
+    todoContainer.innerHTML = "";
+    todos.forEach((todo) => {
+        appendTodoToDOM(todo);
+    });
+}
+
+function loadProjects() {
+    const projectsNames = storage.getProjectsNames();
+    projectsNames.forEach((projectName) => {
+        createButton(projectName, "ul#project", displayProject);
+    });
+}
+
+createButton("Inbox", "ul#home", displayInbox);
+createButton("Today", "ul#home", displayToday);
+createButton("This Week", "ul#home", displayThisWeek);
+
+loadProjects();
