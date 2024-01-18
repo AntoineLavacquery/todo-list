@@ -1,4 +1,4 @@
-export function createButton(label, containerQuery, callback) {
+export function createButton(label, containerQuery, displayFunction) {
     const button = document.createElement("button");
     button.type = "button";
     button.classList.add("nav-link", "link-body-emphasis", "btn", "btn-link");
@@ -6,7 +6,8 @@ export function createButton(label, containerQuery, callback) {
     button.addEventListener("click", function () {
         desactivateAllButtons();
         button.classList.add("active");
-        callback(label);
+        displayFunction(label);
+        if (containerQuery === "ul#project") appendAddTodoButton();
     });
     const li = document.createElement("li");
     li.appendChild(button);
@@ -38,7 +39,6 @@ export function createAddTodoButton() {
 }
 
 export function createTodoElement(todo) {
-    console.log("Coucou");
     const todoElement = document.createElement("div");
     todoElement.classList =
         "alert alert-secondary alert-dismissible fade show d-flex justify-content-between";

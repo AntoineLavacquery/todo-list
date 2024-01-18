@@ -11,8 +11,6 @@ class Todo {
     }
 }
 
-const todoContainer = document.querySelector("div#main");
-
 const storage = new Storage();
 
 const todo1 = new Todo("titre1", "Personal", "2024-01-18", 2);
@@ -26,11 +24,7 @@ storage.addTodo(todo2);
 storage.addTodo(todo3);
 storage.addTodo(todo4);
 
-console.log("~~~~~~~~~~~~~~~~~");
-console.log(storage.getProjectsNames());
-
-console.log(storage.getProjectObj("Personal"));
-console.log(storage.getAllTodos());
+const todoContainer = document.querySelector("div#main");
 
 function displayInbox() {
     const todos = storage.getAllTodos();
@@ -65,6 +59,10 @@ function displayProject(project) {
     todos.forEach((todo) => {
         todoContainer.appendChild(elements.createTodoElement(todo));
     });
+}
+
+function appendAddTodoButton() {
+    todoContainer.appendChild(elements.createAddTodoButton());
 }
 
 function loadProjects() {
