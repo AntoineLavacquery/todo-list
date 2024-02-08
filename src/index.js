@@ -152,4 +152,9 @@ createButton("Inbox", "ul#home", displayInbox);
 createButton("Today", "ul#home", displayToday);
 createButton("This Week", "ul#home", displayThisWeek);
 
+document.addEventListener("DOMContentLoaded", function () {
+    const inboxButton = document.querySelector("ul#home :first-child button");
+    inboxButton.click();
+});
+
 loadProjects();
