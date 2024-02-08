@@ -3,10 +3,7 @@ import Storage from "./modules/storage";
 
 class Todo {
     constructor(title, project, dueDate, priority) {
-        (this.title = title),
-            (this.project = project),
-            (this.dueDate = dueDate),
-            (this.priority = priority);
+        (this.title = title), (this.project = project), (this.dueDate = dueDate), (this.priority = priority);
     }
 }
 
@@ -24,7 +21,7 @@ storage.addTodo(todo3);
 storage.addTodo(todo4);
 
 const todoContainer = document.querySelector("div#todo-container");
-const addTodoButton = document.querySelector("button#add-todo");
+const openAddTodoButton = document.querySelector("button#open-add-todo");
 
 function displayInbox() {
     const todos = storage.getAllTodos();
@@ -77,10 +74,10 @@ function createButton(label, containerQuery, displayFunction) {
         desactivateAllButtons();
         button.classList.add("active");
         if (containerQuery === "ul#project") {
-            addTodoButton.classList.remove("disabled");
+            openAddTodoButton.classList.remove("disabled");
             displayFunction(label);
         } else {
-            addTodoButton.classList.add("disabled");
+            openAddTodoButton.classList.add("disabled");
             displayFunction(label);
         }
     });
@@ -91,8 +88,7 @@ function createButton(label, containerQuery, displayFunction) {
 
 function createTodoElement(todo) {
     const todoElement = document.createElement("div");
-    todoElement.classList =
-        "alert alert-secondary alert-dismissible fade show d-flex justify-content-between";
+    todoElement.classList = "alert alert-secondary alert-dismissible fade show d-flex justify-content-between";
 
     const leftPart = document.createElement("div");
     leftPart.classList = "d-flex gap-2";
@@ -132,6 +128,25 @@ function desactivateAllButtons() {
     const buttons = [...homeButtons, ...projectButtons];
     buttons.forEach((button) => button.classList.remove("active"));
 }
+
+const addTaskButton = document.querySelector("button#add-task");
+addTaskButton.addEventListener("click", () => {
+    const form = document.querySelector("#add-form");
+    const data = new FormData(form);
+
+    const title = data.get("titleinput");
+    const date = data.get("dateinput");
+    const priority = data.get("btnradio");
+
+    console.log("Title: " + title);
+    console.log("Date: " + date);
+    console.log("Priority: " + priority);
+
+    storage.addTodo(new Todo(title, document.querySelector("#project button.active").textContent, date, priority));
+
+    const addTodoModal = bootstrap.Modal.getInstance(document.querySelector("#add-todo-modal"));
+    addTodoModal.hide();
+});
 
 createButton("Inbox", "ul#home", displayInbox);
 createButton("Today", "ul#home", displayToday);
