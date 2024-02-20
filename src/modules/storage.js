@@ -1,39 +1,21 @@
-import {
-    compareAsc,
-    format,
-    startOfDay,
-    startOfWeek,
-    endOfWeek,
-    eachDayOfInterval,
-} from "date-fns";
+import { compareAsc, format, startOfDay, startOfWeek, endOfWeek, eachDayOfInterval } from "date-fns";
 
 export default class Storage {
     getProjectObj(project) {
-        return localStorage.getItem(project)
-            ? JSON.parse(localStorage.getItem(project))
-            : [];
+        return localStorage.getItem(project) ? JSON.parse(localStorage.getItem(project)) : [];
     }
 
     addTodo(newTodo) {
         const projectObj = this.getProjectObj(newTodo.project);
 
         if (projectObj) {
-            const todoExists = projectObj.some(
-                (todo) =>
-                    todo.title === newTodo.title &&
-                    todo.dueDate === newTodo.dueDate
-            );
+            const todoExists = projectObj.some((todo) => todo.title === newTodo.title && todo.dueDate === newTodo.dueDate);
 
             if (!todoExists) {
                 projectObj.push(newTodo);
-                localStorage.setItem(
-                    newTodo.project,
-                    JSON.stringify(projectObj)
-                );
+                localStorage.setItem(newTodo.project, JSON.stringify(projectObj));
             } else {
-                alert(
-                    `${newTodoCard.title} with ${newTodoCard.dueDate} already exists`
-                );
+                alert(`${newTodoCard.title} with ${newTodoCard.dueDate} already exists`);
             }
         } else {
             localStorage.setItem(newTodo.project, JSON.stringify([newTodo]));
@@ -44,13 +26,26 @@ export default class Storage {
         localStorage.setItem(project, JSON.stringify([]));
     }
 
+    updateStatusToLocal(updatedTodo) {
+        // Because areTodosEqual() doesn't care about todo.done, we can use updatedTodo
+        // to identify and replace the old version of itself
+        const projectNames = this.getProjectsNames();
+        projectNames.forEach((projectName) => {
+            const projectObj = this.getProjectObj(projectName);
+            const todoIndex = projectObj.findIndex((todo) => this.areTodosEqual(todo, updatedTodo));
+
+            if (todoIndex !== -1) {
+                projectObj[todoIndex] = updatedTodo;
+                localStorage.setItem(updatedTodo.project, JSON.stringify(projectObj));
+            }
+        });
+    }
+
     deleteTodo(todoToDelete) {
         const projectsNames = this.getProjectsNames();
         projectsNames.forEach((projectName) => {
             const projectObj = this.getProjectObj(projectName);
-            const todoIndex = projectObj.findIndex((todo) =>
-                this.areTodosEqual(todo, todoToDelete)
-            );
+            const todoIndex = projectObj.findIndex((todo) => this.areTodosEqual(todo, todoToDelete));
 
             if (todoIndex !== -1) {
                 projectObj.splice(todoIndex, 1);

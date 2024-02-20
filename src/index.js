@@ -3,11 +3,7 @@ import Storage from "./modules/storage";
 
 class Todo {
     constructor(title, project, dueDate, priority) {
-        (this.title = title),
-        (this.project = project),
-        (this.dueDate = dueDate),
-        (this.priority = priority),
-        (this.done = false);
+        (this.title = title), (this.project = project), (this.dueDate = dueDate), (this.priority = priority), (this.done = false);
     }
 }
 
@@ -95,6 +91,7 @@ function createButton(label, containerQuery, displayFunction) {
 }
 
 function createTodoElement(todo) {
+    console.log({ todo });
     const todoElement = document.createElement("div");
     todoElement.classList = "alert alert-secondary alert-dismissible fade show d-flex justify-content-between";
 
@@ -107,7 +104,18 @@ function createTodoElement(todo) {
     checkbox.type = "checkbox";
     checkbox.addEventListener("change", () => {
         todo.done = checkbox.checked;
-    })
+        storage.updateStatusToLocal(todo);
+        if (todo.done) {
+            todoElement.classList.add("text-decoration-line-through");
+        } else {
+            todoElement.classList.remove("text-decoration-line-through");
+        }
+    });
+
+    if (todo.done) {
+        todoElement.classList.add("text-decoration-line-through");
+        checkbox.checked = true;
+    }
 
     const title = document.createElement("span");
     title.id = title;
@@ -171,8 +179,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 loadProjects();
 
+// voir pourquoi todo.done n'est pas vraiment modifié dans mon createTodoElement
 
-// il faut que au moment de créer le todo, j'assigne à la checkbox la fonction qui fera update
-// du localstorage pour changer son project vers "Done" et faire disparaitre de l'affichage
+//  faire disparaitre de l'affichage
 // modifier displayTodo pour ne pas afficher celles avec Done
 // faut que toutes les dones affichent avec checkbox checké et barrés
