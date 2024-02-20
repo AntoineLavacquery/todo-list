@@ -123,6 +123,7 @@ function createTodoElement(todo) {
 
     leftPart.appendChild(checkbox);
     leftPart.appendChild(title);
+     
 
     const timeRemaining = document.createElement("div");
     timeRemaining.id = "remaining";
@@ -157,11 +158,9 @@ addTaskButton.addEventListener("click", () => {
     const date = data.get("dateinput");
     const priority = data.get("btnradio");
 
-    console.log("Title: " + title);
-    console.log("Date: " + date);
-    console.log("Priority: " + priority);
-
-    storage.addTodo(new Todo(title, document.querySelector("#project button.active").textContent, date, priority));
+    const projectButton = document.querySelector("#project button.active");
+    storage.addTodo(new Todo(title, projectButton.textContent, date, priority));
+    displayProject(projectButton.textContent);
 
     const addTodoModal = bootstrap.Modal.getInstance(document.querySelector("#add-todo-modal"));
     addTodoModal.hide();
@@ -179,8 +178,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 loadProjects();
 
-// voir pourquoi todo.done n'est pas vraiment modifié dans mon createTodoElement
 
-//  faire disparaitre de l'affichage
-// modifier displayTodo pour ne pas afficher celles avec Done
-// faut que toutes les dones affichent avec checkbox checké et barrés
