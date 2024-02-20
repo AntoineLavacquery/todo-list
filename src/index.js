@@ -58,10 +58,6 @@ function displayProject(project) {
     });
 }
 
-function displayDone() {
-    displayProject("Done");
-}
-
 function loadProjects() {
     const projectsNames = storage.getProjectsNames();
     projectsNames.forEach((projectName) => {
@@ -169,7 +165,6 @@ addTaskButton.addEventListener("click", () => {
 createButton("Inbox", "ul#home", displayInbox);
 createButton("Today", "ul#home", displayToday);
 createButton("This Week", "ul#home", displayThisWeek);
-createButton("Done", "ul#home", displayDone);
 
 document.addEventListener("DOMContentLoaded", function () {
     const inboxButton = document.querySelector("ul#home :first-child button");
