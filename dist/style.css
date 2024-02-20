@@ -63,3 +63,7 @@ main {
 .scrollarea {
     overflow-y: auto;
 }
+.btn:focus,
+.btn.active {
+  color: white !important; /* Change to the color you want */
+}
