@@ -103,13 +103,19 @@ function createTodoElement(todo) {
         storage.updateStatusToLocal(todo);
         if (todo.done) {
             todoElement.classList.add("text-decoration-line-through");
+            todoElement.classList.remove("alert-secondary");
+            todoElement.classList.add("alert-success");
         } else {
             todoElement.classList.remove("text-decoration-line-through");
+            todoElement.classList.remove("alert-success");
+            todoElement.classList.add("alert-secondary");
         }
     });
 
     if (todo.done) {
         todoElement.classList.add("text-decoration-line-through");
+        todoElement.classList.remove("alert-secondary");
+        todoElement.classList.add("alert-success");
         checkbox.checked = true;
     }
 
@@ -173,4 +179,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 loadProjects();
 
-
+// TODO
+// rendre vert le todo lorsqu'il est complété
+// rendre rouge/orange lorsque la date est passée
+// donner fonctionnalité au bouton de suppression de todo
+// mettre en place le menu d'ajout de project quand on clique sur New
+// convertir les dates en nombre de jours restants
