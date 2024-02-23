@@ -1,4 +1,4 @@
-import { compareAsc, format } from "date-fns";
+import { compareAsc, isFuture, formatDistanceToNow } from "date-fns";
 import Storage from "./modules/storage";
 
 class Todo {
@@ -86,10 +86,14 @@ function createButton(label, containerQuery, displayFunction) {
     document.querySelector(containerQuery).appendChild(li);
 }
 
+function isTodoRed(todo) {
+    return isFuture(new Date(todo.dueDate)) ? "alert-danger" : "alert-secondary";
+}
+
 function createTodoElement(todo) {
     console.log({ todo });
     const todoElement = document.createElement("div");
-    todoElement.classList = "alert alert-secondary alert-dismissible fade show d-flex justify-content-between";
+    todoElement.classList = `alert ${isTodoRed(todo)} alert-dismissible fade show d-flex justify-content-between`;
 
     const leftPart = document.createElement("div");
     leftPart.classList = "d-flex gap-2";
@@ -103,18 +107,18 @@ function createTodoElement(todo) {
         storage.updateStatusToLocal(todo);
         if (todo.done) {
             todoElement.classList.add("text-decoration-line-through");
-            todoElement.classList.remove("alert-secondary");
+            todoElement.classList.remove(isTodoRed(todo));
             todoElement.classList.add("alert-success");
         } else {
             todoElement.classList.remove("text-decoration-line-through");
             todoElement.classList.remove("alert-success");
-            todoElement.classList.add("alert-secondary");
+            todoElement.classList.add(isTodoRed(todo));
         }
     });
 
     if (todo.done) {
         todoElement.classList.add("text-decoration-line-through");
-        todoElement.classList.remove("alert-secondary");
+        todoElement.classList.remove(isTodoRed(todo));
         todoElement.classList.add("alert-success");
         checkbox.checked = true;
     }
@@ -125,11 +129,11 @@ function createTodoElement(todo) {
 
     leftPart.appendChild(checkbox);
     leftPart.appendChild(title);
-     
 
-    const timeRemaining = document.createElement("div");
-    timeRemaining.id = "remaining";
-    timeRemaining.innerHTML = todo.dueDate;
+    const timeRemainingEl = document.createElement("div");
+    timeRemainingEl.id = "remaining";
+    const remainingTime = formatDistanceToNow(new Date(todo.dueDate), { addSuffix: true });
+    timeRemainingEl.innerHTML = todo.dueDate + " " + remainingTime;
 
     const closeButton = document.createElement("button");
     closeButton.type = "button";
@@ -138,7 +142,7 @@ function createTodoElement(todo) {
     closeButton.setAttribute("aria-label", "Close");
 
     todoElement.appendChild(leftPart);
-    todoElement.appendChild(timeRemaining);
+    todoElement.appendChild(timeRemainingEl);
     todoElement.appendChild(closeButton);
 
     return todoElement;
@@ -180,8 +184,11 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
+// populate de todos générés à partir de la date d'aujourd'hui
+// prévoir couleur warning si c'est aujourd'hui
+// prévoir un classement des todos en fonction de la date
+// convertir les dates en nombre de jours restants
 // rendre vert le todo lorsqu'il est complété
 // rendre rouge/orange lorsque la date est passée
 // donner fonctionnalité au bouton de suppression de todo
 // mettre en place le menu d'ajout de project quand on clique sur New
-// convertir les dates en nombre de jours restants
