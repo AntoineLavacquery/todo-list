@@ -1,4 +1,4 @@
-import { compareAsc, isPast, formatDistanceToNow, subHours } from "date-fns";
+import { formatRelative, compareAsc, isPast, formatDistanceToNow, subHours } from "date-fns";
 import Storage from "./modules/storage";
 
 class Todo {
@@ -152,8 +152,7 @@ function createTodoElement(todo) {
 
     const timeRemainingEl = document.createElement("div");
     timeRemainingEl.id = "remaining";
-    const remainingTime = formatDistanceToNow(new Date(todo.dueDate), { addSuffix: true });
-    timeRemainingEl.innerHTML = todo.dueDate + " " + remainingTime;
+    timeRemainingEl.innerHTML = formatRelative(new Date(todo.dueDate), new Date());
 
     const closeButton = document.createElement("button");
     closeButton.type = "button";
@@ -211,9 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
-// prévoir un classement des todos en fonction de la date
 // convertir les dates en nombre de jours restants
-// rendre vert le todo lorsqu'il est complété
-// rendre rouge/orange lorsque la date est passée
-// donner fonctionnalité au bouton de suppression de todo
+// prévoir un classement des todos en fonction de la date
+
 // mettre en place le menu d'ajout de project quand on clique sur New
