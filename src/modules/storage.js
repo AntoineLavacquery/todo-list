@@ -85,6 +85,11 @@ export default class Storage {
                 allProjects.push(project);
             }
         });
+
+        allProjects.sort((a, b) => {
+            return compareAsc(new Date(a.dueDate), new Date(b.dueDate));
+        });
+
         return allProjects;
     }
 
@@ -94,6 +99,11 @@ export default class Storage {
         const todaysTodos = allTodos.filter((todo) => {
             return !compareAsc(startOfDay(new Date(todo.dueDate)), currentDate);
         });
+
+        todaysTodos.sort((a, b) => {
+            return compareAsc(new Date(a.dueDate), new Date(b.dueDate));
+        });
+
         return todaysTodos;
     }
 
@@ -108,6 +118,11 @@ export default class Storage {
             const todoDate = startOfDay(new Date(todo.dueDate));
             return daysOfWeek.some((day) => +day === +todoDate);
         });
+
+        thisWeekTodos.sort((a, b) => {
+            return compareAsc(new Date(a.dueDate), new Date(b.dueDate));
+        });
+
         return thisWeekTodos;
     }
 

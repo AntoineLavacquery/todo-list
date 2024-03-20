@@ -73,6 +73,11 @@ function displayProject(project) {
         storage.addProject(project);
     }
     todoContainer.innerHTML = "";
+
+    todos.sort((a, b) => {
+        return compareAsc(new Date(a.dueDate), new Date(b.dueDate));
+    });
+
     todos.forEach((todo) => {
         todoContainer.appendChild(createTodoElement(todo));
     });
@@ -210,7 +215,6 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
-// convertir les dates en nombre de jours restants
 // prévoir un classement des todos en fonction de la date
 
 // mettre en place le menu d'ajout de project quand on clique sur New
