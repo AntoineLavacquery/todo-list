@@ -1,4 +1,4 @@
-import { compareAsc, isFuture, formatDistanceToNow, subHours } from "date-fns";
+import { compareAsc, isPast, formatDistanceToNow, subHours } from "date-fns";
 import Storage from "./modules/storage";
 
 class Todo {
@@ -107,7 +107,7 @@ function createButton(label, containerQuery, displayFunction) {
 }
 
 function isTodoRed(todo) {
-    return isFuture(new Date(todo.dueDate)) ? "alert-danger" : "alert-secondary";
+    return isPast(new Date(todo.dueDate)) ? "alert-danger" : "alert-secondary";
 }
 
 function createTodoElement(todo) {
@@ -211,13 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
-// ~~populate de todos générés à partir de la date d'aujourd'hui~~
-
-
-// permettre suppression TODO dans le stockage
-
-
-// prévoir couleur warning si c'est aujourd'hui
 // prévoir un classement des todos en fonction de la date
 // convertir les dates en nombre de jours restants
 // rendre vert le todo lorsqu'il est complété
