@@ -10,6 +10,8 @@ class Todo {
 const storage = new Storage();
 storage.wipe();
 
+const closeButtonMap = new Map();
+
 function populateBaseTodos() {
     const todayAt8 = new Date();
     todayAt8.setHours(8, 0, 0, 0);
@@ -159,6 +161,13 @@ function createTodoElement(todo) {
     closeButton.setAttribute("data-bs-dismiss", "alert");
     closeButton.setAttribute("aria-label", "Close");
 
+    closeButtonMap.set(closeButton, todo);
+
+    closeButton.addEventListener('click', () => {
+        storage.deleteTodo(closeButtonMap.get(closeButton));
+        closeButtonMap.delete(closeButton);
+    });
+
     todoElement.appendChild(leftPart);
     todoElement.appendChild(timeRemainingEl);
     todoElement.appendChild(closeButton);
@@ -202,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
-// populate de todos générés à partir de la date d'aujourd'hui
+// ~~populate de todos générés à partir de la date d'aujourd'hui~~
 
 
 // permettre suppression TODO dans le stockage
