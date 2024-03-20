@@ -8,7 +8,7 @@ class Todo {
 }
 
 const storage = new Storage();
-storage.wipe();
+// storage.wipe();
 
 const closeButtonMap = new Map();
 

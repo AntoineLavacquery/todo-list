@@ -9,13 +9,13 @@ export default class Storage {
         const projectObj = this.getProjectObj(newTodo.project);
 
         if (projectObj) {
-            const todoExists = projectObj.some((todo) => todo.title === newTodo.title && todo.dueDate === newTodo.dueDate);
+            const todoExists = projectObj.some((todo) => todo.title === newTodo.title && new Date(todo.dueDate).getTime() === newTodo.dueDate.getTime());
 
             if (!todoExists) {
                 projectObj.push(newTodo);
                 localStorage.setItem(newTodo.project, JSON.stringify(projectObj));
             } else {
-                alert(`${newTodoCard.title} with ${newTodoCard.dueDate} already exists`);
+                console.warn(`"${newTodo.title}" with this date already exists. Todo not created.`);
             }
         } else {
             localStorage.setItem(newTodo.project, JSON.stringify([newTodo]));
