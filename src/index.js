@@ -1,4 +1,4 @@
-import { compareAsc, isFuture, formatDistanceToNow } from "date-fns";
+import { compareAsc, isFuture, formatDistanceToNow, subHours } from "date-fns";
 import Storage from "./modules/storage";
 
 class Todo {
@@ -8,17 +8,35 @@ class Todo {
 }
 
 const storage = new Storage();
-
-const todo1 = new Todo("titre1", "Personal", "2024-01-18", 2);
-const todo2 = new Todo("titre2", "Personal", "2024-01-20", 1);
-const todo3 = new Todo("titre3", "Work", "2024-03-26", 0);
-const todo4 = new Todo("titre4", "Sport", "2024-03-27", 2);
-
 storage.wipe();
-storage.addTodo(todo1);
-storage.addTodo(todo2);
-storage.addTodo(todo3);
-storage.addTodo(todo4);
+
+function populateBaseTodos() {
+    const todayAt8 = new Date();
+    todayAt8.setHours(8, 0, 0, 0);
+
+    const todayAt20 = new Date();
+    todayAt20.setHours(20, 0, 0, 0);
+
+    const fiveDaysAwayAt16 = new Date();
+    fiveDaysAwayAt16.setDate(-5);
+    fiveDaysAwayAt16.setHours(16, 0, 0, 0);
+
+    const inOneMonth = new Date();
+    inOneMonth.setMonth(inOneMonth.getMonth() + 1);
+    inOneMonth.setHours(9, 0, 0, 0);
+
+    const passedTodo = new Todo("Make an appointment with the dentist", "Personal", fiveDaysAwayAt16, 1);
+    const todaysMorningTodo = new Todo("Fill the car", "Personal", todayAt8, 1);
+    const todaysEveningTodo = new Todo("Yoga", "Sport", todayAt20, 0);
+    const futureTodo = new Todo("Compare tickets to London", "Holidays", inOneMonth, 2);
+
+    storage.addTodo(passedTodo);
+    storage.addTodo(todaysMorningTodo);
+    storage.addTodo(todaysEveningTodo);
+    storage.addTodo(futureTodo);
+}
+
+populateBaseTodos();
 
 const todoContainer = document.querySelector("div#todo-container");
 const openAddTodoButton = document.querySelector("button#open-add-todo");
@@ -185,6 +203,11 @@ loadProjects();
 
 // TODO
 // populate de todos générés à partir de la date d'aujourd'hui
+
+
+// permettre suppression TODO dans le stockage
+
+
 // prévoir couleur warning si c'est aujourd'hui
 // prévoir un classement des todos en fonction de la date
 // convertir les dates en nombre de jours restants
