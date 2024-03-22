@@ -69,7 +69,7 @@ function displayThisWeek() {
 
 function displayProject(project) {
     const todos = storage.getProjectObj(project);
-    if (!todos) {
+    if (todos.length === 0) {
         storage.addProject(project);
     }
     todoContainer.innerHTML = "";
@@ -83,11 +83,15 @@ function displayProject(project) {
     });
 }
 
-function loadProjects() {
-    const projectsNames = storage.getProjectsNames();
-    projectsNames.forEach((projectName) => {
-        createButton(projectName, "ul#project", displayProject);
-    });
+function loadProjects(oneProject = "") {
+    if (oneProject) {
+        createButton(oneProject, "ul#project", displayProject);
+    } else {
+        const projectsNames = storage.getProjectsNames();
+        projectsNames.forEach((projectName) => {
+            createButton(projectName, "ul#project", displayProject);
+        });
+    }
 }
 
 function createButton(label, containerQuery, displayFunction) {
@@ -188,7 +192,7 @@ function desactivateAllButtons() {
 
 const addTaskButton = document.querySelector("button#add-task");
 addTaskButton.addEventListener("click", () => {
-    const form = document.querySelector("#add-form");
+    const form = document.querySelector("#add-todo-form");
     const data = new FormData(form);
 
     const title = data.get("titleinput");
@@ -203,6 +207,21 @@ addTaskButton.addEventListener("click", () => {
     addTodoModal.hide();
 });
 
+const addProjectButton = document.querySelector("button#add-project");
+addProjectButton.addEventListener("click", () => {
+    const form = document.querySelector("#add-project-form");
+    const data = new FormData(form);
+
+    const name = data.get("nameinput");
+
+    // storage.addProject(name);
+    displayProject(name);
+    loadProjects(name);
+
+    const addProjectModal = bootstrap.Modal.getInstance(document.querySelector("#add-project-modal"));
+    addProjectModal.hide();    
+});
+
 createButton("Inbox", "ul#home", displayInbox);
 createButton("Today", "ul#home", displayToday);
 createButton("This Week", "ul#home", displayThisWeek);
@@ -215,6 +234,5 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
-// prévoir un classement des todos en fonction de la date
 
 // mettre en place le menu d'ajout de project quand on clique sur New

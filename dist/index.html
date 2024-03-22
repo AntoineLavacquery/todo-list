@@ -31,7 +31,7 @@
             <hr />
 
             <div class="fs-3 mb-2">Projects</div>
-            <button type="button" class="btn btn-primary mb-2">New</button>
+            <button id="open-add-todo" type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#add-project-modal">New</button>
             <ul id="project" class="nav nav-pills flex-column"></ul>
         </div>
 
@@ -62,7 +62,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="add-form">
+                        <form id="add-todo-form">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control rounded-3" name="titleinput" id="title-input" placeholder="Title" required />
                                 <label for="titleinput">Title</label>
@@ -83,6 +83,30 @@
                             <div class="pt-4 d-flex gap-2 justify-content-center border-top-0">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" type="submit" id="add-task" class="btn btn-primary">Add task</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Project -->
+        <div class="modal fade" id="add-project-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-2">
+                    <div class="modal-header border-bottom-0">
+                        <h1 class="modal-title fs-3" id="exampleModalLabel">New Project</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add-project-form">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-3" name="nameinput" id="title-input" placeholder="Project name" required />
+                                <label for="nameinput">Name</label>
+                            </div>
+                            <div class="pt-4 d-flex gap-2 justify-content-center border-top-0">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" type="submit" id="add-project" class="btn btn-primary">Add project</button>
                             </div>
                         </form>
                     </div>
