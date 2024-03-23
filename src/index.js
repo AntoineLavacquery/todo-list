@@ -99,6 +99,27 @@ function createButton(label, containerQuery, displayFunction) {
     button.type = "button";
     button.classList.add("nav-link", "link-body-emphasis", "btn", "btn-link");
     button.textContent = label;
+
+    if (containerQuery === "ul#project") {
+        const closeButton = document.createElement("button");
+        closeButton.type = "button";
+        closeButton.className = "btn-close";
+        closeButton.style.fontSize = "0.75rem";
+        closeButton.style.paddingLeft = "1rem";
+
+        closeButton.setAttribute("aria-label", "Close");
+        closeButton.addEventListener("click", function (event) {
+            event.stopPropagation();
+            button.remove();
+        });
+
+        closeButton.addEventListener("click", () => {
+            storage.deleteProject(label);
+        });
+
+        button.appendChild(closeButton);
+    }
+
     button.addEventListener("click", function () {
         desactivateAllButtons();
         button.classList.add("active");
@@ -171,7 +192,7 @@ function createTodoElement(todo) {
 
     closeButtonMap.set(closeButton, todo);
 
-    closeButton.addEventListener('click', () => {
+    closeButton.addEventListener("click", () => {
         storage.deleteTodo(closeButtonMap.get(closeButton));
         closeButtonMap.delete(closeButton);
     });
@@ -219,7 +240,7 @@ addProjectButton.addEventListener("click", () => {
     loadProjects(name);
 
     const addProjectModal = bootstrap.Modal.getInstance(document.querySelector("#add-project-modal"));
-    addProjectModal.hide();    
+    addProjectModal.hide();
 });
 
 createButton("Inbox", "ul#home", displayInbox);
@@ -234,5 +255,5 @@ document.addEventListener("DOMContentLoaded", function () {
 loadProjects();
 
 // TODO
-
-// mettre en place le menu d'ajout de project quand on clique sur New
+// Ouverture d'un modal demandant confirmation
+// Suppression de tous les TODOs
