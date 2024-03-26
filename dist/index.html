@@ -114,6 +114,29 @@
             </div>
         </div>
 
+        <!-- Del Project -->
+        <div class="modal fade" id="del-project-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-2">
+                    <div class="modal-header border-bottom-0">
+                        <h1 class="modal-title fs-3" id="exampleModalLabel">Warning</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add-project-form">
+                            <div class="form-floating mb-3">
+                                <p>If you proceed, all the content will be lost.</p>
+                            </div>
+                            <div class="pt-4 d-flex gap-2 justify-content-center border-top-0">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" type="submit" id="del-project" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="./main.js"></script>
     </body>
 </html>

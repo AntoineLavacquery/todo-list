@@ -11,13 +11,14 @@ const storage = new Storage();
 // storage.wipe();
 
 const closeButtonMap = new Map();
+let projectButtonToDel = "";
 
 function populateBaseTodos() {
     const todayAt8 = new Date();
     todayAt8.setHours(8, 0, 0, 0);
 
-    const todayAt20 = new Date();
-    todayAt20.setHours(20, 0, 0, 0);
+    const todayAt19 = new Date();
+    todayAt19.setHours(19, 30, 0, 0);
 
     const fiveDaysAwayAt16 = new Date();
     fiveDaysAwayAt16.setDate(-5);
@@ -29,7 +30,7 @@ function populateBaseTodos() {
 
     const passedTodo = new Todo("Make an appointment with the dentist", "Personal", fiveDaysAwayAt16, 1);
     const todaysMorningTodo = new Todo("Fill the car", "Personal", todayAt8, 1);
-    const todaysEveningTodo = new Todo("Yoga", "Sport", todayAt20, 0);
+    const todaysEveningTodo = new Todo("Yoga", "Sport", todayAt19, 0);
     const futureTodo = new Todo("Compare tickets to London", "Holidays", inOneMonth, 2);
 
     storage.addTodo(passedTodo);
@@ -104,17 +105,15 @@ function createButton(label, containerQuery, displayFunction) {
         const closeButton = document.createElement("button");
         closeButton.type = "button";
         closeButton.className = "btn-close";
+
+        closeButton.setAttribute("data-bs-toggle", "modal");
+        closeButton.setAttribute("data-bs-target", "#del-project-modal");
+        closeButton.setAttribute("aria-label", "Close");
         closeButton.style.fontSize = "0.75rem";
         closeButton.style.paddingLeft = "1rem";
 
-        closeButton.setAttribute("aria-label", "Close");
-        closeButton.addEventListener("click", function (event) {
-            event.stopPropagation();
-            button.remove();
-        });
-
         closeButton.addEventListener("click", () => {
-            storage.deleteProject(label);
+            projectButtonToDel = button;
         });
 
         button.appendChild(closeButton);
@@ -141,7 +140,6 @@ function isTodoRed(todo) {
 }
 
 function createTodoElement(todo) {
-    console.log({ todo });
     const todoElement = document.createElement("div");
     todoElement.classList = `alert ${isTodoRed(todo)} alert-dismissible fade show d-flex justify-content-between`;
 
@@ -243,6 +241,20 @@ addProjectButton.addEventListener("click", () => {
     addProjectModal.hide();
 });
 
+const delProjectButton = document.querySelector("button#del-project");
+delProjectButton.addEventListener("click", () => {
+    if (projectButtonToDel.length === 0) {
+        console.error("projectButtonToDel error");
+    } else {
+        storage.deleteProject(projectButtonToDel.innerText);
+        projectButtonToDel.remove();
+        projectButtonToDel = "";
+
+        const delProjectModal = bootstrap.Modal.getInstance(document.querySelector("#del-project-modal"));
+        delProjectModal.hide();
+    }
+});
+
 createButton("Inbox", "ul#home", displayInbox);
 createButton("Today", "ul#home", displayToday);
 createButton("This Week", "ul#home", displayThisWeek);
@@ -253,7 +265,3 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 loadProjects();
-
-// TODO
-// Ouverture d'un modal demandant confirmation
-// Suppression de tous les TODOs
